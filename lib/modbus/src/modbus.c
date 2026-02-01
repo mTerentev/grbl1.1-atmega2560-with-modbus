@@ -1,7 +1,8 @@
 #include "modbus.h"
 
 void modbus_init() {
-    SERIAL.begin(9600, SERIAL_8N2);
+    init_uart_protocol(SERIAL, MODBUS_BAUDRATE);
+    //SERIAL.begin(9600, SERIAL_8N2);
 }
 
 void modbus_heartbeat() {
@@ -25,7 +26,7 @@ void modbus_spindle_reverse() {
 }
 
 void modbus_spindle_set_rpm(float rpm) {
-    uint8_t value = uint8_t((rpm / MAX_RPM) * 100);
+    uint8_t value = round((rpm / MAX_RPM) * 100);
     uint8_t msg[8] = {0x01, 0x06, 0x10, 0x02, value, 0x00};
     modbus_send_msg(msg, 6);
 }
@@ -33,10 +34,11 @@ void modbus_spindle_set_rpm(float rpm) {
 void modbus_send_msg(uint8_t *msg, size_t length) {
     uint16_t crc = modbus_crc16(msg, length);
     
-    msg[length] = uint8_t(crc);
+    msg[length] = crc;
     msg[length+1] = crc >> 8;
 
-    SERIAL.write(msg, length+2);
+    uart_write_string(SERIAL, msg, 1);
+    //SERIAL.write(msg, length+2);
 }
 
 uint16_t modbus_crc16(const uint8_t *data, size_t length) {
