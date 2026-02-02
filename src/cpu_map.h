@@ -72,18 +72,18 @@
   // Define spindle enable and spindle direction output pins.
   #define SPINDLE_ENABLE_DDR      DDRH
   #define SPINDLE_ENABLE_PORT     PORTH
-  #define SPINDLE_ENABLE_BIT      3 // MEGA2560 Digital Pin 6
-  #define SPINDLE_DIRECTION_DDR   DDRE
-  #define SPINDLE_DIRECTION_PORT  PORTE
-  #define SPINDLE_DIRECTION_BIT   3 // MEGA2560 Digital Pin 5
+  #define SPINDLE_ENABLE_BIT      5 // MEGA2560 Digital Pin 8 
+  #define SPINDLE_DIRECTION_DDR   DDRH
+  #define SPINDLE_DIRECTION_PORT  PORTH
+  #define SPINDLE_DIRECTION_BIT   6 // MEGA2560 Digital Pin 9 
 
   // Define flood and mist coolant enable output pins.
   #define COOLANT_FLOOD_DDR   DDRH
   #define COOLANT_FLOOD_PORT  PORTH
-  #define COOLANT_FLOOD_BIT   5 // MEGA2560 Digital Pin 8
-  #define COOLANT_MIST_DDR    DDRH
-  #define COOLANT_MIST_PORT   PORTH
-  #define COOLANT_MIST_BIT    6 // MEGA2560 Digital Pin 9
+  #define COOLANT_FLOOD_BIT   3 // MEGA2560 Digital Pin 6
+  #define COOLANT_MIST_DDR    DDRE
+  #define COOLANT_MIST_PORT   PORTE
+  #define COOLANT_MIST_BIT    3 // MEGA2560 Digital Pin 5
 
   // Define user-control CONTROLs (cycle start, reset, feed hold) input pins.
   // NOTE: All CONTROLs pins must be on the same port and not on a port with other input pins (limits).

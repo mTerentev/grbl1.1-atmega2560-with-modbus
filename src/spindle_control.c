@@ -200,8 +200,17 @@ void spindle_set_state(uint8_t state, float rpm)
 
     modbus_spindle_set_rpm(rpm);
 
-    if (state == SPINDLE_ENABLE_CW) modbus_spindle_run();
-    if (state == SPINDLE_ENABLE_CCW) modbus_spindle_reverse();
+    switch (state)
+    {
+    case SPINDLE_ENABLE_CW:
+      modbus_spindle_run();
+      break;
+    case SPINDLE_ENABLE_CCW:
+      modbus_spindle_reverse();
+      break;
+    default:
+      break;
+    }
 
     #ifndef SPINDLE_ENABLE_OFF_WITH_ZERO_SPEED
       #ifdef INVERT_SPINDLE_ENABLE_PIN

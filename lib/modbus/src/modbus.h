@@ -8,7 +8,9 @@ extern "C" {
 #endif
 
 #define SERIAL Serial2
-#define MAX_RPM 24000.00
+#define MAX_FREQ 320
+#define MAX_RPM (320*60)
+#define MODBUS_ID 0x00
 
 void modbus_init();
 
