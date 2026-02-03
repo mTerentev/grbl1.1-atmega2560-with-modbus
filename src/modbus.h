@@ -2,7 +2,6 @@
 #define modbus
 
 #include <Arduino.h>
-#include "grbl.h"
 
 #define SERIAL Serial2
 #define MAX_FREQ 320
@@ -12,6 +11,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#include "grbl.h"
 
 void modbus_init();
 
