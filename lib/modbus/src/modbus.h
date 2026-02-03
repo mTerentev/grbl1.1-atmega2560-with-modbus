@@ -2,15 +2,16 @@
 #define modbus
 
 #include <Arduino.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include "grbl.h"
 
 #define SERIAL Serial2
 #define MAX_FREQ 320
 #define MAX_RPM (320*60)
-#define MODBUS_ID 0x00
+#define MODBUS_ID 0x01
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 void modbus_init();
 

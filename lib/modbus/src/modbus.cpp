@@ -31,25 +31,51 @@ void modbus_spindle_set_rpm(float rpm) {
     modbus_send_msg(msg, 6);
 }
 
-void modbus_send_msg(uint8_t *msg, size_t length) {
+bool modbus_send_pkg(uint8_t *msg, size_t length) {
     int L = length+2;
     uint16_t crc = modbus_crc16(msg, length);
     
     msg[length] = uint8_t(crc);
     msg[length+1] = crc >> 8;
 
-    uint8_t response[L];
-
     SERIAL.write(msg, L);
-    int i=0;
-    int del=0;
-    while(del < 1000) {
-        Serial3.write(del);
-        del++;
+    
+    uint8_t response[2*L];
+    for (int i = 0; i < 2*L; i++) response[i] = 0x00;
+    int resp_L=0;
+    SERIAL.flush();
+    for(int i = 0; i < 100; i++) {
+        Serial3.print("1");
     }
+
+    while (SERIAL.available())
+    {
+        response[resp_L++] = SERIAL.read();
+    }
+    if(resp_L > L*2) return false;
+
+    int begin = 0;
+    while(response[begin] != msg[0]){begin++;}
+    if(begin > resp_L-L) return false;
+    
+    for(int i = 0; i < L; i++) {
+        if(response[begin+i] != msg[i]) {return false;}
+    }
+    return true;
 }
 
-
+void modbus_send_msg(uint8_t *msg, size_t length) {
+    int faults = 0;
+    while (!modbus_send_pkg(msg, length)){
+        faults++;
+        if(faults >= 10){
+            //Communication fault
+            system_set_exec_alarm(EXEC_ALARM_ABORT_CYCLE);
+            protocol_execute_realtime();
+            break;
+        }
+    }
+}
 
 
 uint16_t modbus_crc16(const uint8_t *data, size_t length) {
